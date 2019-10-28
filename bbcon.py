@@ -1,4 +1,4 @@
-
+"""Hovedklasse for kontroller"""
 
 
 class BBCON:
@@ -19,7 +19,6 @@ class BBCON:
         self.sensobs = sensobs
         self.motobs = motobs
         self.arbitrator = arbitrator
-
 
     def add_behavior(self, behavior):
         """ Legger til en nylig lagd handling til behaviors-listen """
