@@ -17,3 +17,4 @@ class Sensob:
             sensor_values.append(sensor.update())
         # TODO: 2. Lagre konvertere verdiene til pre-prosessert sensob-verdi
 
+

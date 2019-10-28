@@ -8,7 +8,7 @@ class Behavior:
         """
         Init-klassen som instansierer følgende:
         :param bbcon:                 Controller-klassen som hører til denne handlingen hører til
-        :param sensobs:               Cn liste med alle sensobs denne handlingen bruker
+        :param sensobs:               En liste med alle sensobs denne handlingen bruker
         :param motor_recommendations: En liste med andbefalinger, en per motob, som denne handlingen tilrettelegger til artbritratoren
         :param active_flag:           Boolean som indikerer om handlingen er aktiv eller ikke
         :param halt_request:          Boolean som sier hvorvidt roboten skal stoppe
@@ -27,15 +27,19 @@ class Behavior:
 
     def consider_deactivation(self):
         # TODO 1: Skrive metode som tester hvorvidt handlingen skal deaktiveres, dersom den er activ
+        pass
 
     def consider_activation(self):
         # TODO 2: skrive metode som tester hvorvidt handlingen skal aktiveres, dersom den er deaktivert
+        pass
 
     def update(self):
         # TODO 3: Skrive metode som oppdaterer aktivitetsstatusen
+        pass
 
     def sense_and_act(self):
         # TODO 4: Skrive metode som for hver behavior ser på sensor dataen (values) og lager motob andbefalinger, og legger disse i sin egen liste med motob andbefalinger. Må også oppdatere match_degree basert på dataen, og oppdatere sin egen metch degree.
+        pass
 
 
 
