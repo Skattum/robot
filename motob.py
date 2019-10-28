@@ -4,11 +4,13 @@
 class Motob:
     """Motob klassen"""
 
-    def __init__(self, motors=()):
+    def __init__(self, motors=None):
         """
-        1. motors - a list of the motors whose settings will be determined by the motob.
-        2. value - a holder of the most recent motor recommendation sent to the motob
+        :param motors - a list of the motors whose settings will be determined by the motob.
+        : value - a holder of the most recent motor recommendation sent to the motob
         """
+        if motors is None:
+            motors = []
         self.value = None
         self.motors = motors
 
