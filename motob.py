@@ -12,11 +12,12 @@ class Motob:
         self.value = None
         self.motors = motors
 
-    def update(self):
+    def update(self, new_motor_recommendation):
         """
         Update - receive a new motor recommendation, load it into the value slot, and operationalize it.
         """
-        # TODO: Skrive metoden
+        self.value = new_motor_recommendation
+        self.operationalize()
 
     def operationalize(self):
         """
