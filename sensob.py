@@ -1,7 +1,7 @@
 """Docstring"""
 
 
-class Sensob():
+class Sensob:
     """Sensob-klassen"""
 
     def __init__(self, sensors=()):
