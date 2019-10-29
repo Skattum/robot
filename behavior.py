@@ -2,11 +2,9 @@
 
 class Behavior:
 
-
-
-    def __init__(self, bbcon, sensobs, motor_recommendations, active_flag, halt_request, priority, match_degree, weight):
+    def __init__(self, bbcon, sensobs, motor_recommendations, active_flag, halt_request, priority, match_degree):
         """
-        Init-klassen som instansierer følgende:
+        Init-metoden som instansierer følgende:
         :param bbcon:                 Controller-klassen som hører til denne handlingen hører til
         :param sensobs:               En liste med alle sensobs denne handlingen bruker
         :param motor_recommendations: En liste med andbefalinger, en per motob, som denne handlingen tilrettelegger til artbritratoren
@@ -14,7 +12,6 @@ class Behavior:
         :param halt_request:          Boolean som sier hvorvidt roboten skal stoppe
         :param priority:              En statisk verdi som indikerer viktigheten til handlingen
         :param match_degree:          Et reelt tall fra 0 til 1 som indikerer verdien til handlingen gitt nåværende forhold
-        :param weight:                Produktet av priority*match_degree som arbitrator for å velge vinnende handling
         """
         self.bbcon = bbcon
         self.sensobs = sensobs
@@ -23,7 +20,7 @@ class Behavior:
         self.halt_request = halt_request
         self.priority = priority
         self.match_degree = match_degree
-        self.weight = weight
+        self.weight = priority * match_degree
 
     def consider_deactivation(self):
         # TODO 1: Skrive metode som tester hvorvidt handlingen skal deaktiveres, dersom den er activ
