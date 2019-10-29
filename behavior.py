@@ -18,7 +18,7 @@ class Behavior:
         """
         self.bbcon = bbcon
         self.sensobs = sensobs
-        self.motor_recommandation = motor_recommendations
+        self.motor_recommandations = motor_recommendations
         self.active_flag = active_flag
         self.halt_request = halt_request
         self.priority = priority
@@ -38,7 +38,9 @@ class Behavior:
         pass
 
     def sense_and_act(self):
-        # TODO 4: Skrive metode som for hver behavior ser på sensor dataen (values) og lager motob andbefalinger, og legger disse i sin egen liste med motob andbefalinger. Må også oppdatere match_degree basert på dataen, og oppdatere sin egen metch degree.
+        # TODO 4: Skrive metode som for hver behavior ser på sensor dataen (values) og lager motob andbefalinger,
+        #  og legger disse i sin egen liste med motob andbefalinger. Må også oppdatere match_degree basert på dataen,
+        #  og oppdatere sin egen match degree.
         pass
 
 

@@ -13,3 +13,6 @@ class Arbitrator:
         Sekker alle active_behaviors og velger en vinner.
         # TODO: Bestemme oss for deterministisk eller stokastisk metode.
         """
+        for behavior in self.bbcon.active_behaviors:
+
+
