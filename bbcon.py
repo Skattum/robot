@@ -38,17 +38,31 @@ class BBCON:
 
     def run_one_timestep(self):
 
-        # Ber alle sensob oppdatere seg seg
+        # 1. Ber alle sensob oppdatere seg seg
         for sensob in self.sensobs:
             sensob.update()
 
-        # Ber alle behavior oppdatere seg selv, og legger til i riktige lister dersom de nå har endret status fra aktiv til ikke aktiv, eller motsatt.
+        # 2. Ber alle behavior oppdatere seg selv, og legger til i riktige lister dersom de nå har endret status fra aktiv til ikke aktiv, eller motsatt.
         for behavior in self.behaviors:
             behavior.update()
             if behavior.active_flag and behavior not in self.active_behaviors:
                 self.active_behaviors(behavior)
             elif not behavior.active_flag and behavior in self.active_behaviors:
                 self.deactive_behavior(behavior)
+        # 3. Result består av den vinnende handlingen, som arbitrator-en bestemmer i sin choose_action-metode,
+        # sin motorandbefaling og halt request flag, av typen, [motorandbefaling, halt request flag =True/False]
+        result = self.arbitrator.choose_action()
+
+        # 4. Oppdatere alle motobs
+        if result[1]:                   #Dersom den vinnende handlingen har halt_request = True, så skal BBCON avslutte og returnere True
+            return True                 #slik at roboten kjører så lenge
+        for motob in self.motobs:
+            motob.update(result[0])     #Oppdaterer alle motob-ene med andbefalingene
+
+        #
+
+
+
 
         # TODO: 3. Invoke the arbitrator by calling arbitrator.choose action, which will choose a winning behavior and return that behavior’s motor recommendations and halt request flag.
         # TODO: 4. Update the motobs based on these motor recommendations. The motobs will then update the settings of all motors.
