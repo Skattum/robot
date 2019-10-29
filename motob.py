@@ -21,9 +21,11 @@ class Motob:
         self.value = new_motor_recommendation
         self.operationalize()
 
-    def operationalize(self):
+    def operationalize(self, operation=None):
         """
         Operationalize - convert a motor recommendation into one or more motor settings, which
         are sent to the corresponding motor(s).
         """
         # TODO: Skrive metoden
+
+

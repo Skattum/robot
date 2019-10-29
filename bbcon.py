@@ -34,17 +34,30 @@ class BBCON:
 
     def deactive_behavior(self,behavior):
         """Fjerner en tidligere aktiv handling fra listen med aktive handliner"""
+        self.active_behaviors.remove(behavior)
 
     def run_one_timestep(self):
-        # TODO: 1. Update all sensobs - These updates will involve querying the relevant sensors for their values, along with any pre-processing of those values (as described below)
-        # TODO: 2. Update all behaviors - These updates involve reading relevant sensob values and producing a motor recommendation.
+
+        # Ber alle sensob oppdatere seg seg
+        for sensob in self.sensobs:
+            sensob.update()
+
+        # Ber alle behavior oppdatere seg selv, og legger til i riktige lister dersom de nå har endret status fra aktiv til ikke aktiv, eller motsatt.
+        for behavior in self.behaviors:
+            behavior.update()
+            if behavior.active_flag and behavior not in self.active_behaviors:
+                self.active_behaviors(behavior)
+            elif not behavior.active_flag and behavior in self.active_behaviors:
+                self.deactive_behavior(behavior)
+
         # TODO: 3. Invoke the arbitrator by calling arbitrator.choose action, which will choose a winning behavior and return that behavior’s motor recommendations and halt request flag.
         # TODO: 4. Update the motobs based on these motor recommendations. The motobs will then update the settings of all motors.
         # TODO: 5. Wait - This pause (in code execution) will allow the motor settings to remain active for a short period of time, e.g., one half second, thus producing activity in the robot, such as moving forward or turning.
         # TODO: 6. Reset the sensobs - Each sensob may need to reset itself, or its associated sensor(s), in some way.
         pass
 
-        ##dette endres
+
+
     
 
 
