@@ -1,5 +1,6 @@
 """Arbitrator-klassen"""
 
+
 class Arbitrator:
     """Arbitrator-klassen"""
 
