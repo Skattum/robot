@@ -1,4 +1,10 @@
 Sensorer vi vil bruke:
 1. Kamera
-2. Avstandsmåler (ultrasonic?)
-3.
+2. Avstandsmåler (ultrasonic)
+3. IR-sensor
+
+Oppførsel:
+1.  Følge en linje til den merker at noe er foran den
+2.  Hvis den møter på en hindring, ta bilde.
+3.  Hvis hinderet er (mest) grønt, snu.
+    Hvis hinderet er (mest) rødt, stopp.
