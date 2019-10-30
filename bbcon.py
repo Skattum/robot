@@ -1,3 +1,4 @@
+
 """Hovedklasse for kontroller"""
 
 
@@ -46,7 +47,7 @@ class BBCON:
         for behavior in self.behaviors:
             behavior.update()
             if behavior.active_flag and behavior not in self.active_behaviors:
-                self.active_behaviors(behavior)
+                self.active_behavior(behavior)
             elif not behavior.active_flag and behavior in self.active_behaviors:
                 self.deactive_behavior(behavior)
         # 3. Result består av den vinnende handlingen, som arbitrator-en bestemmer i sin choose_action-metode,
