@@ -1,8 +1,9 @@
+import math
 
 class Behavior:
-    """Abstrakt klasse der subklassene implementerer metodene i Behavior"""
+    """Behavior-klassen"""
 
-    def __init__(self, bbcon, sensobs, motor_recommendations, active_flag, halt_request, priority, match_degree):
+    def __init__(self, bbcon, sensobs=None):
         """
         Init-metoden som instansierer følgende:
         :param bbcon:                 Controller-klassen som hører til denne handlingen hører til
@@ -18,84 +19,133 @@ class Behavior:
 
         self.bbcon = bbcon
         self.sensobs = sensobs #[kamera,utrsonic,ir]
-        self.motor_recommandations = motor_recommendations
-        self.active_flag = active_flag
-        self.halt_request = halt_request
-        self.priority = priority
-        self.match_degree = match_degree
-        self.weight = priority * match_degree
+        self.motor_recommendations = None
+        self.active_flag = False
+        self.halt = False
+        self.priority = 1
+        self.match_degree = 0
+        self.weight = self.priority * self.match_degree
 
-    def consider_deactivation(self):
-        # TODO 1: Skrive metode som tester hvorvidt handlingen skal deaktiveres, dersom den er activ
+    def halt_request(self, halter):
+        self.halt = halter
+        if halter:
+            self.active_flag = halter
 
-        pass
+    def reset(self):
+        """Resetter match_degree og motor_recommendations"""
+        self.match_degree = 0
+        self.motor_recommendations = None
 
     def consider_activation(self):
-        # TODO 2: skrive metode som tester hvorvidt handlingen skal aktiveres, dersom den er deaktivert
-        pass
+        """Sjekker om den skal akriveres"""
+        self.active_flag = True
 
-    def update(self):
-        # TODO 3: Skrive metode som oppdaterer aktivitetsstatusen
-        pass
+    def consider_deactivation(self):
+        """Sjekker om den skal akriveres"""
+        self.active_flag = True
 
     def sense_and_act(self):
-
-        # TODO 4: Skrive metode som for hver behavior ser på sensor dataen (values) og lager motob andbefalinger,
-        #  og legger disse i sin egen liste med motob andbefalinger. Må også oppdatere match_degree basert på dataen,
-        #  og oppdatere sin egen match degree.
-
-        pass
-
-class Forward(Behavior):
-
-
-
-class Backward(Behavior):
-
-
-class Left(Behavior):
-
-class Right(Behavior):
-
-class Stop(Behavior):
-
-    def __init__(self, sensitivity):
-        super().__init__(self)
-        self.cam = self.sensobs[0] #får verdiene til kamera, ser på den første i listen kamera returnerer (rød i rgb)
-        self.sonic = self.sensobs[1] #får avstanden som sonic returnerer
-        self.motob_rec = [0,0]
-        self.sensitivity= sensitivity #prosentandel som kreves for at en handling skjer
-
-    def concider_activation(self):
-        if self.sonic.update() <= 0.6 or self.cam.update() >= self.sensitivity: #indeks 0 i kameras verdier er rød, kan byttes med ["Red] tror jeg
-            return True
-        else:
-            return False
-        
-    def consider_deactivation(self):
-        if self.sonic.update() <= 0.6 or self.cam.update() >= self.sensitivity:
-            return False
-        else:
-            return True
+        """Abstrakt metode"""
+        return
 
     def update(self):
+        """
+        Kalles hvert timestep
+        """
+        if self.active_flag:
+            self.consider_deactivation()
+            self.sense_and_act()
+        else:
+            self.consider_activation()
+
+        self.weight = self.priority * self.match_degree
+
+class Go(Behavior):
+    """Go-behavior"""
+
+    def __init__(self, bbcon):
+        """Init"""
+        super().__init__(bbcon)
+        self.priority = bbcon.behavior_values["go_pri"]
+
+    def sense_and_act(self):
+        """Senser og acter :--)"""
+        # TODO: koke denne ferdig, bbcon må skrives bedre
+        self.reset()
 
 
+class AvoidCollision(Behavior):
+    """Unngår kollisjoner"""
+
+    def __init__(self, bbcon, ultra_sonic):
+        """Init"""
+        super().__init__(bbcon, [ultra_sonic])
+        self.priority = bbcon.behavior_values["avcol_pri"]
+
+    def sense_and_act(self):
+        dist = self.sensobs[0].get_value()
+        min_dist = self.bbcon.behavior_values["min_dist"]
+        self.reset()
+
+        if dist > min_dist:
+            self.motor_recommendations = self.bbcon.behavior_values["back"]
+            self.match_degree = 1
 
 
+class AvoidWhiteLine(Behavior):
+    """Unngår hvit linje"""
+    def __init__(self, bbcon, ir_sensor):
+        """Init"""
+        super().__init__(bbcon, [ir_sensor])
+        self.priority = bbcon.behavior_values["avline_pri"]
+
+    def consider_activation(self):
+        """Sjekker om den skal akriveres"""
+        self.active_flag = True
+
+    def consider_deactivation(self):
+        """Sjekker om den skal akriveres"""
+        self.active_flag = False
+
+    def sense_and_act(self):
+        """Sjekker om den er over en hvit linje"""
+        ir_values = self.sensobs[0].get_value()
+        tresh = self.bbcon.behavior_values["white_tresh"]
+        self.reset()
+        average = math.fsum(ir_values) / len(ir_values)
+        if average < tresh:
+            self.motor_recommendations = self.bbcon.behavior_values["turn"]
+            self.match_degree = 1
 
 
+class Stop(Behavior):
+    """Stopper"""
+    def __init__(self, bbcon, cam_sensor):
+        """Init"""
+        super().__init__(bbcon, [cam_sensor])
+        self.priority = bbcon.behavior_values["cam_pri"]
+        self.stopped = False
 
+    def consider_activation(self):
+        """Sjekker om den skal akriveres"""
+        self.active_flag = True
 
+    def consider_deactivation(self):
+        """Sjekker om den skal akriveres"""
+        if self.halt:
+            self.active_flag = False
 
+    def sense_and_act(self):
+        """Tar bilde av hva enn som står foran"""
+        img = self.sensobs[0].get_value()
+        blue_tresh = self.bbcon.behavior_values["blue_tresh"]
+        self.reset()
 
-
-
-
-
-
-
-
-
-
+        if img[2] > blue_tresh:
+            if self.stopped:
+                self.motor_recommendations = self.bbcon.behavior_values["forward"]
+                self.stopped = False
+            else:
+                self.motor_recommendations = self.bbcon.behavior_values["stop"]
+                self.stopped = True
 
