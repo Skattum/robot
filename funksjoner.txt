@@ -1,0 +1,4 @@
+Sensorer vi vil bruke:
+1. Kamera
+2. Avstandsmåler (ultrasonic?)
+3.
