@@ -52,7 +52,15 @@ class Behavior:
 class Forward(Behavior):
 
 
-class Ba
+class Backward(Behavior):
+
+
+class Left(Behavior):
+
+class Right(Behavior):
+
+class Stop(Behavior):
+    
 
 
 
