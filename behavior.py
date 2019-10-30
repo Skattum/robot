@@ -1,11 +1,12 @@
 
 class Behavior:
+    """Abstrakt klasse der subklassene implementerer metodene i Behavior"""
 
     def __init__(self, bbcon, sensobs, motor_recommendations, active_flag, halt_request, priority, match_degree):
         """
         Init-metoden som instansierer følgende:
         :param bbcon:                 Controller-klassen som hører til denne handlingen hører til
-        :param sensobs:               En liste med alle sensobs denne handlingen bruker
+        :param sensobs:               En liste med alle sensobs denne handlingen bruker i rekkefølge: [kamera, ultrasonic, ir]
         :param motor_recommendations: En liste med andbefalinger, en per motob, som denne handlingen tilrettelegger til artbritratoren
         :param active_flag:           Boolean som indikerer om handlingen er aktiv eller ikke
         :param halt_request:          Boolean som sier hvorvidt roboten skal stoppe
@@ -16,7 +17,7 @@ class Behavior:
             print("The parameters sensobs and motor_recommendations must be lists")
 
         self.bbcon = bbcon
-        self.sensobs = sensobs
+        self.sensobs = sensobs #[kamera,utrsonic,ir]
         self.motor_recommandations = motor_recommendations
         self.active_flag = active_flag
         self.halt_request = halt_request
@@ -26,10 +27,6 @@ class Behavior:
 
     def consider_deactivation(self):
         # TODO 1: Skrive metode som tester hvorvidt handlingen skal deaktiveres, dersom den er activ
-        for i in range(len(self.sensobs)):
-
-
-
 
         pass
 
@@ -52,6 +49,7 @@ class Behavior:
 class Forward(Behavior):
 
 
+
 class Backward(Behavior):
 
 
@@ -60,7 +58,23 @@ class Left(Behavior):
 class Right(Behavior):
 
 class Stop(Behavior):
-    
+
+    def __init__(self, sensitivity):
+        super().__init__(self)
+        self.cam = self.sensobs[0]
+        self.sonic = self.sensobs[1]
+        self.motob_rec = [0,0]
+        self.sensitivity= sensitivity
+
+    def  concider active()
+        if self.sonic
+
+
+
+
+
+
+
 
 
 
