@@ -26,3 +26,5 @@ class Line_sensob(Sensob):
 
     ir_sensor = ReflectanceSensors(True)
     ir_sensor.setup()
+    values = ir_sensor.update()
+    print(values)
