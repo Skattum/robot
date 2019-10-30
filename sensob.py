@@ -23,5 +23,6 @@ class CameraSensob(Sensob):
 
 class Line_sensob(Sensob):
     """Sjekker om roboten er sentrert på linjen"""
+
     ir_sensor = ReflectanceSensors(True)
     ir_sensor.setup()
