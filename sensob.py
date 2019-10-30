@@ -1,6 +1,6 @@
-from ultrasonic import Ultrasonic
-from reflectance_sensors import ReflectanceSensors
-from camera import Camera
+from PLAB.ultrasonic import Ultrasonic
+from PLAB.reflectance_sensors import ReflectanceSensors
+from PLAB.camera import Camera
 
 
 class Sensob:

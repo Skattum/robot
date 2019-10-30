@@ -148,4 +148,3 @@ class Stop(Behavior):
             else:
                 self.motor_recommendations = self.bbcon.behavior_values["stop"]
                 self.stopped = True
-
