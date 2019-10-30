@@ -1,11 +1,21 @@
-
 """Hovedklasse for kontroller"""
+from arbitrator import Arbitrator
+from behavior import *
+from camera_sensob import CameraSensob
+from irproximity_sensob import IRProximitySensob
+from motob import Motob
+from motors import Motors
+from reflectance_sensob import ReflectanceSensob
+from ultrasonic import Ultrasonic
+from zumo_button import ZumooButton
+
+
 
 
 class BBCON:
     """Behavoir-Based Controller-klasse"""
 
-    def __init__(self, behaviors=None, sensobs=None, motobs=None, arbitrator=None):
+    def __init__(self):
         """
         Init
         :param behaviors: liste med alle tilhørende handlinger til roboten
@@ -14,28 +24,37 @@ class BBCON:
         :param arbitrator: arbitrator-en som BBCON-en knyttes til
         """
 
-        self.behaviors = behaviors
+        self.behaviors = []
         self.active_behaviors = []
         self.inactive_behaviors = []
-        self.sensobs = sensobs
-        self.motobs = motobs
-        self.arbitrator = arbitrator
+        self.sensobs = []
+        self.motobs = []
+        self.arbitrator = Arbitrator()
+        self.behavior_values = {'motor_duration': 0.5, 'min_distance': 5.0, 'goPri': 1,
+                                'backwards': [-1,-1], 'forward': [1,1], 'whitePri': 2,
+                                'red_scale': 0.95, 'collitionPri': 4}
+
+
 
     def add_behavior(self, behavior):
         """ Legger til en nylig lagd handling til behaviors-listen """
-        self.behaviors.append(behavior)
+        if behavior not in self.behaviors:
+            self.behaviors.append(behavior)
 
     def add_sensob(self, sensob):
         """ Legger til en nylig lagd sensob til sensob-listen"""
-        self.sensobs.append(sensob)
+        if sensob not in self.sensobs:
+            self.sensobs.append(sensob)
 
     def active_behavior(self, behavior):
         """Legger til en eksisterende handling til listen med aktive handlinger"""
-        self.active_behaviors.append(behavior)
+        if behavior not in self.active_behaviors:
+            self.active_behaviors.append(behavior)
 
     def deactive_behavior(self,behavior):
         """Fjerner en tidligere aktiv handling fra listen med aktive handliner"""
-        self.active_behaviors.remove(behavior)
+        if behavior in self.active_behaviors:
+            self.active_behaviors.remove(behavior)
 
     def run_one_timestep(self):
 
@@ -46,30 +65,53 @@ class BBCON:
         # 2. Ber alle behavior oppdatere seg selv, og legger til i riktige lister dersom de nå har endret status fra aktiv til ikke aktiv, eller motsatt.
         for behavior in self.behaviors:
             behavior.update()
-            if behavior.active_flag and behavior not in self.active_behaviors:
+            if behavior.active_flag:
                 self.active_behavior(behavior)
-            elif not behavior.active_flag and behavior in self.active_behaviors:
+            else:
                 self.deactive_behavior(behavior)
-        # 3. Result består av den vinnende handlingen, som arbitrator-en bestemmer i sin choose_action-metode,
-        # sin motorandbefaling og halt request flag, av typen, [motorandbefaling, halt request flag =True/False]
-        result = self.arbitrator.choose_action()
+        recommendations, stop = self.arbitrator.choose_action(self.active_behaviors)
+        print("recommendations from arbitrator", recommendations[i])
+        for i in range(len(self.motobs)):
+            print("recommendations i", recommendations[i])
+        for sensob in self.sensobs:
+            sensob.reset()
 
-        # 4. Oppdatere alle motobs
-        if result[1]:                   #Dersom den vinnende handlingen har halt_request = True, så skal BBCON avslutte og returnere True
-            return True                 #slik at roboten kjører så lenge
-        for motob in self.motobs:
-            motob.update(result[0])     #Oppdaterer alle motob-ene med andbefalingene
+    def add_motob(self):
+        print("INsdie add motod")
+        motor = Motors()
+        motor.forward(0.25, 1.0)
+        print("drive forward")
+        motob = Motob(motor,self)
+        self.motobs.append(motob)
 
-        #
+    def main(self):
+        zumo = ZumooButton()
+        zumo.wait_for_press()
+        print("main:))")
+        self.add_motob()
+        ultrasonic = Ultrasonic()
+        irsensor = ReflectanceSensob()
+        camera = CameraSensob()
+        go = Go(self)
+        collide = AvoidCollision(self, ultrasonic)
+        white = AvoidWhiteline(self, irsensor)
+        stop = Stop(camera)
+        self.sensobs.append(ultrasonic)
+        self.sensobs.append(irsensor)
+        self.sensobs.append(camera)
+        self.behaviors.append(go)
+        self.behaviors.append(collide)
+        self.behaviors.append(white)
+        self.behaviors.append(stop)
+        while True:
+            self.run_one_timestep()
+            print("run")
 
 
+if __name__ == "__main__":
+    bbcon == BBCON()
+    bbcon.main()
 
-
-        # TODO: 3. Invoke the arbitrator by calling arbitrator.choose action, which will choose a winning behavior and return that behavior’s motor recommendations and halt request flag.
-        # TODO: 4. Update the motobs based on these motor recommendations. The motobs will then update the settings of all motors.
-        # TODO: 5. Wait - This pause (in code execution) will allow the motor settings to remain active for a short period of time, e.g., one half second, thus producing activity in the robot, such as moving forward or turning.
-        # TODO: 6. Reset the sensobs - Each sensob may need to reset itself, or its associated sensor(s), in some way.
-        pass
 
 
 

@@ -14,8 +14,6 @@ class Behavior:
         :param priority:              En statisk verdi som indikerer viktigheten til handlingen
         :param match_degree:          Et reelt tall fra 0 til 1 som indikerer verdien til handlingen gitt nåværende forhold
         """
-        if not isinstance(sensobs, list) or not isinstance(motor_recommendations, list):
-            print("The parameters sensobs and motor_recommendations must be lists")
 
         self.bbcon = bbcon
         self.sensobs = sensobs #[kamera,utrsonic,ir]

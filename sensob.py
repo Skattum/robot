@@ -59,10 +59,11 @@ class CameraSensob(Sensob):
 
         for x in range(40,80):
             for y in range(40,50):
-                band = img.getpixel((x,y))
+                band = img.getpixel((x, y))
                 rgb_list[0] += band[0]
                 rgb_list[1] += band[1]
                 rgb_list[2] += band[2]
+
         tot = sum(rgb_list)
         rgb_list[0] = rgb_list[0] / tot
         rgb_list[1] = rgb_list[1] / tot
