@@ -1,5 +1,4 @@
 
-
 class Behavior:
 
     def __init__(self, bbcon, sensobs, motor_recommendations, active_flag, halt_request, priority, match_degree):
@@ -13,6 +12,9 @@ class Behavior:
         :param priority:              En statisk verdi som indikerer viktigheten til handlingen
         :param match_degree:          Et reelt tall fra 0 til 1 som indikerer verdien til handlingen gitt nåværende forhold
         """
+        if not isinstance(sensobs, list) or not isinstance(motor_recommendations, list):
+            print("The parameters sensobs and motor_recommendations must be lists")
+
         self.bbcon = bbcon
         self.sensobs = sensobs
         self.motor_recommandations = motor_recommendations
@@ -24,6 +26,11 @@ class Behavior:
 
     def consider_deactivation(self):
         # TODO 1: Skrive metode som tester hvorvidt handlingen skal deaktiveres, dersom den er activ
+        for i in range(len(self.sensobs)):
+
+
+
+
         pass
 
     def consider_activation(self):
@@ -35,10 +42,18 @@ class Behavior:
         pass
 
     def sense_and_act(self):
+
         # TODO 4: Skrive metode som for hver behavior ser på sensor dataen (values) og lager motob andbefalinger,
         #  og legger disse i sin egen liste med motob andbefalinger. Må også oppdatere match_degree basert på dataen,
         #  og oppdatere sin egen match degree.
+
         pass
+
+class Forward(Behavior):
+
+
+class Ba
+
 
 
 

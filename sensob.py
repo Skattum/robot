@@ -15,6 +15,9 @@ class Sensob:
         sensor_values = []
         for sensor in self.sensors:
             sensor_values.append(sensor.update())
+        return sensor_values
         # TODO: 2. Lagre konvertere verdiene til pre-prosessert sensob-verdi
 
+
+class CameraSensob(Sensob):
 

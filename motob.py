@@ -1,5 +1,5 @@
+from motors import Motors
 """Motob klassen"""
-
 
 class Motob:
     """Motob klassen"""
@@ -12,7 +12,7 @@ class Motob:
         if motors is None:
             motors = []
         self.value = None
-        self.motors = motors
+        self.motor = Motors()
 
     def update(self, new_motor_recommendation):
         """
