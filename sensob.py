@@ -1,5 +1,5 @@
 """Docstring"""
-
+from PLAB.reflectance_sensors import *
 
 class Sensob:
     """Sensob-klassen"""
@@ -18,9 +18,11 @@ class Sensob:
         return sensor_values
         # TODO: 2. Lagre konvertere verdiene til pre-prosessert sensob-verdi
 
-
 class CameraSensob(Sensob):
 
 
+class Line_sensob(Sensob):
+    """Sjekker om roboten er sentrert på linjen"""
 
-
+    ir_sensor = ReflectanceSensors(True)
+    ir_sensor.setup()
