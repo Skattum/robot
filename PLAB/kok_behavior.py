@@ -141,8 +141,11 @@ class Stop(Behavior):
         blue_tresh = self.bbcon.behavior_values["blue_tresh"]
         self.reset()
 
-        if self.stopped and img[2] > blue_tresh:
-            self.motor_recommendations = self.bbcon.behavior_values["forward"]
-            self.stopped = False
-        elif img[2] >
+        if img[2] > blue_tresh:
+            if self.stopped:
+                self.motor_recommendations = self.bbcon.behavior_values["forward"]
+                self.stopped = False
+            else:
+                self.motor_recommendations = self.bbcon.behavior_values["stop"]
+                self.stopped = True
 
