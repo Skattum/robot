@@ -61,19 +61,19 @@ class Stop(Behavior):
 
     def __init__(self, sensitivity):
         super().__init__(self)
-        self.cam = self.sensobs[0]
-        self.sonic = self.sensobs[1]
+        self.cam = self.sensobs[0] #får verdiene til kamera, ser på den første i listen kamera returnerer (rød i rgb)
+        self.sonic = self.sensobs[1] #får avstanden som sonic returnerer
         self.motob_rec = [0,0]
         self.sensitivity= sensitivity #prosentandel som kreves for at en handling skjer
 
     def concider_activation(self):
-        if self.sonic.get_value() <= 0.6 or self.cam.get_value()[0] >= self.sensitivity: #indeks 0 i kameras verdier er rød, kan byttes med ["Red] tror jeg
+        if self.sonic.update() <= 0.6 or self.cam.update() >= self.sensitivity: #indeks 0 i kameras verdier er rød, kan byttes med ["Red] tror jeg
             return True
         else:
             return False
         
     def consider_deactivation(self):
-        if self.sonic.get_value() <= 0.6 or self.cam.get_value()[0] >= self.sensitivity:
+        if self.sonic.update() <= 0.6 or self.cam.update() >= self.sensitivity:
             return False
         else:
             return True
