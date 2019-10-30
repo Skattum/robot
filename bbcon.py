@@ -1,3 +1,4 @@
+
 """Hovedklasse for kontroller"""
 
 
