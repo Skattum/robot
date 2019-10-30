@@ -28,18 +28,18 @@ class ReflectanceSensors():
 
     def setup(self):
         # Initialize class variables
-        self.max_val = [-1, -1, -1, -1, -1, -1]
-        self.min_val = [-1, -1, -1, -1, -1, -1]
+        self.max_val = [-1, -1, -1, -1, -1]
+        self.min_val = [-1, -1, -1, -1, -1]
         self.start_time = -1
         # Initialize value array to all negative values, which should never appear
         # as an actual result
-        self.value = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+        self.value = [-1.0, -1.0, -1.0, -1.0, -1.0]
         # A dictionary mapping each channel to the index it's value is located in
         # the value array
-        self.sensor_indices = {29: 5, 36: 4, 37: 3, 31: 2, 32: 1, 33: 0}
+        self.sensor_indices = {36: 4, 37: 3, 31: 2, 32: 1, 33: 0}
         self.updated = False
         # For GPIO.BOARD
-        self.sensor_inputs = [33, 32, 31, 37, 36, 29]  # Sensors from left to right
+        self.sensor_inputs = [33, 32, 31, 37, 36]  # Sensors from left to right
 
         # Set the mode to GPIO.BOARD
         GPIO.setmode(GPIO.BOARD)
@@ -52,7 +52,6 @@ class ReflectanceSensors():
         # GPIO.setup(sensor_inputs, GPIO.IN)
         for pin in self.sensor_inputs:
             time = self.get_sensor_reading(pin)
-
             # Get the index from the map
             index = self.sensor_indices[pin]
 
@@ -96,7 +95,7 @@ class ReflectanceSensors():
 
     def reset(self):
         self.updated = False
-        self.value = [-1.0, -1.0, -1.0, -1.0, -1.0, -1.0]
+        self.value = [-1.0, -1.0, -1.0, -1.0, -1.0]
 
 
     # Function should return a list of 6 reals between 0 and 1.0 indicating
@@ -124,7 +123,7 @@ class ReflectanceSensors():
     # Uses the calibrated min and maxs for each sensor to return a normalized
     # value for the @param sensor_time for the given @param index
     def normalize(self, index, sensor_time):
-        normalized_value = float(sensor_time) / (self.max_val[index] - self.min_val[index] + 1)
+        normalized_value = float(sensor_time) / (self.max_val[index] - self.min_val[index])
         if (normalized_value > 1.0):
             return 1.0
         elif (normalized_value < 0.0):

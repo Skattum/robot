@@ -43,7 +43,3 @@ class ReflectanceSensob(Sensob_kok):
         self.value = self.sensors[0].get_value()
         print("Reflectance: ", self.value)
         return self.value
-
-
-
-
