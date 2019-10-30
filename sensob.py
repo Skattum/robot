@@ -2,8 +2,8 @@ from ultrasonic import Ultrasonic
 from reflectance_sensors import ReflectanceSensors
 from camera import Camera
 
-class Sensob_kok:
 
+class Sensob:
 
     def __init__(self):
         self.sensors = [] #inneholder instanser av sensor_wrapper
@@ -19,7 +19,8 @@ class Sensob_kok:
         for sensor in self.sensors:
             sensor.reset() #alle sensorer har en reset metode
 
-class UltrasonicSensob(Sensob_kok):
+
+class UltrasonicSensob(Sensob):
 
     def __init__(self):
         super().__init__()
@@ -32,7 +33,8 @@ class UltrasonicSensob(Sensob_kok):
         print("Ultrasonic: ", self.value)
         return self.value
 
-class ReflectanceSensob(Sensob_kok):
+
+class ReflectanceSensob(Sensob):
 
     def __init__(self):
         super().__init__()
@@ -44,10 +46,9 @@ class ReflectanceSensob(Sensob_kok):
         self.value = self.sensors[0].get_value()
         print("Reflectance: ", self.value)
         return self.value
-<<<<<<< HEAD
-=======
 
-class CameraSensob(Sensob_kok):
+
+class CameraSensob(Sensob):
     def __init__(self):
         super().__init__()
         self.camera_obj = Camera()
@@ -73,10 +74,3 @@ class CameraSensob(Sensob_kok):
         self.value = self.rgb(self.sensors[0].update())
         print("Camera: ", self.value)
         return self.value
-
-
-
-
-
-
->>>>>>> 9bc44daf65ec64786ca0b36ce2e9ed7577d82609
