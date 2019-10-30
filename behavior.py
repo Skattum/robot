@@ -64,10 +64,26 @@ class Stop(Behavior):
         self.cam = self.sensobs[0]
         self.sonic = self.sensobs[1]
         self.motob_rec = [0,0]
-        self.sensitivity= sensitivity
+        self.sensitivity= sensitivity #prosentandel som kreves for at en handling skjer
 
-    def  concider active()
-        if self.sonic
+    def concider_activation(self):
+        if self.sonic.get_value() <= 0.6 or self.cam.get_value()[0] >= self.sensitivity: #indeks 0 i kameras verdier er rød, kan byttes med ["Red] tror jeg
+            return True
+        else:
+            return False
+        
+    def consider_deactivation(self):
+        if self.sonic.get_value() <= 0.6 or self.cam.get_value()[0] >= self.sensitivity:
+            return False
+        else:
+            return True
+
+    def update(self):
+
+
+
+
+
 
 
 
