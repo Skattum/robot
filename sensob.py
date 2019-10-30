@@ -19,6 +19,7 @@ class Sensob:
         # TODO: 2. Lagre konvertere verdiene til pre-prosessert sensob-verdi
 
 class CameraSensob(Sensob):
+    
 
 
 class Line_sensob(Sensob):

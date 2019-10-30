@@ -62,6 +62,7 @@ class CameraSensob(Sensob_kok):
                 rgb_list[0] += band[0]
                 rgb_list[1] += band[1]
                 rgb_list[2] += band[2]
+
         tot = sum(rgb_list)
         rgb_list[0] = rgb_list[0] / tot
         rgb_list[1] = rgb_list[1] / tot
