@@ -28,4 +28,5 @@ class Arbitrator:
         for interval in intervals:
             if interval[1] >= ticket > interval[0]:
                 winner = interval[2]
+        print(recommendations[winner])
         return recommendations[winner]
