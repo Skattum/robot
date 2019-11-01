@@ -27,7 +27,7 @@ class BBCON:
         self.inactive_behaviors = []
         self.sensobs = []
         self.motobs = []
-        self.arbitrator = Arbitrator()
+        self.arbitrator = Arbitrator(self)
         self.behavior_prios = {'goPri': 1, 'whitePri': 2, 'collitionPri': 4}
 
         self.behavior_values = {
@@ -73,12 +73,14 @@ class BBCON:
                 self.active_behavior(behavior)
             else:
                 self.deactive_behavior(behavior)
-        recommendations, stop = self.arbitrator.choose_action(self.active_behaviors)
+        recommendations, stop = self.arbitrator.choose_action()
         print("recommendations from arbitrator", recommendations[i])
         for i in range(len(self.motobs)):
             print("recommendations i", recommendations[i])
         for sensob in self.sensobs:
             sensob.reset()
+
+
 
     def add_motob(self):
         print("Inside add motod")
