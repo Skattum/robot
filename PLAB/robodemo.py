@@ -2,12 +2,12 @@ __author__ = 'keithd'
 
 from time import sleep
 import random
-import imager2 as IMR
-from reflectance_sensors import ReflectanceSensors
-from camera import Camera
-from motors import Motors
-from ultrasonic import Ultrasonic
-from zumo_button import ZumoButton
+import PLAB.imager2 as IMR
+from PLAB.reflectance_sensors import ReflectanceSensors
+from PLAB.camera import Camera
+from PLAB.motors import Motors
+from PLAB.ultrasonic import Ultrasonic
+from PLAB.zumo_button import ZumoButton
 
 
 ## BE SURE TO RUN THESE DEMOS ON THE FLOOR or to have plenty of people guarding
@@ -16,17 +16,11 @@ from zumo_button import ZumoButton
 # This just moves the robot around in a fixed dance pattern.  It uses no sensors.
 
 def dancer():
-    # print("Trykk på knappen")
-    # ZumoButton().wait_for_press()
-    print("Setter opp motor")
+    ZumoButton().wait_for_press()
     m = Motors()
-    print("Motor satt opp, kjører fremover")
     m.forward(.2,3)
-    print("Rygger")
     m.backward(.2,3)
-    print("Høyre")
     m.right(.5,3)
-    print("Venstre")
     m.left(.5,3)
     m.backward(.3,2.5)
     m.set_value([.5,.1],10)
@@ -50,24 +44,24 @@ def explorer(dist=10):
     m.left(.75,5)
 
 
-def random_step(motors, speed=0.25, duration=1.0):
-    directory = random.choice(['forward','backward','left','right'])
-    eval('Motors.' + directory)(motors, speed, duration)
+
+def random_step(motors,speed=0.25,duration=1):
+    dir = random.choice(['forward','backward','left','right'])
+    eval('Motors.'+ dir)(motors,speed,duration)
 
 # This moves around randomly until it gets to a dark spot on the floor (detected with the infrared belly sensors).
 # It then rotates around, snapping pictures as it goes.  It then pastes all the pictures together into a
 # panoramo view, many of which may be created per "vacation".
 
-def tourist(steps=25, shots=5, speed=.25):
+def tourist(steps=25,shots=5,speed=.25):
     ZumoButton().wait_for_press()
     rs = ReflectanceSensors(); m = Motors(); c = Camera()
     for i in range(steps):
-        random_step(m,speed=speed, duration=0.5)
+        random_step(m,speed=speed,duration=0.5)
         vals = rs.update()
         if sum(vals) < 1:  # very dark area
             im = shoot_panorama(c,m,shots)
             im.dump_image('vacation_pic'+str(i)+'.jpeg')
-
 
 def shoot_panorama(camera,motors,shots=5):
     s = 1
@@ -77,3 +71,4 @@ def shoot_panorama(camera,motors,shots=5):
         motors.right(0.5,rotation_time)
         im = im.concat_horiz(IMR.Imager(image=camera.update()))
     return im
+

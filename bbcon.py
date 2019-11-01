@@ -1,15 +1,13 @@
 """Hovedklasse for kontroller"""
 from arbitrator import Arbitrator
 from behavior import *
-from camera_sensob import CameraSensob
-from irproximity_sensob import IRProximitySensob
+from PLAB.camera_sensob import CameraSensob
+from PLAB.irproximity_sensor import irproximity_sensor
 from motob import Motob
-from motors import Motors
-from reflectance_sensob import ReflectanceSensob
-from ultrasonic import Ultrasonic
-from zumo_button import ZumooButton
-
-
+from PLAB.motors import Motors
+from PLAB.reflectance_sensob import ReflectanceSensob
+from PLAB.ultrasonic import Ultrasonic
+from PLAB.zumo_button import ZumooButton
 
 
 class BBCON:
@@ -30,9 +28,15 @@ class BBCON:
         self.sensobs = []
         self.motobs = []
         self.arbitrator = Arbitrator()
-        self.behavior_values = {'motor_duration': 0.5, 'min_distance': 5.0, 'goPri': 1,
-                                'backwards': [-1,-1], 'forward': [1,1], 'whitePri': 2,
-                                'red_scale': 0.95, 'collitionPri': 4}
+        self.behavior_prios = {'goPri': 1, 'whitePri': 2, 'collitionPri': 4}
+
+        self.behavior_values = {
+                                'motor_duration': 0.5,
+                                'min_distance': 5.0,
+                                'backwards': [-1,-1],
+                                'forward': [1,1],
+                                'blue_tresh': 0.95
+                                }
 
 
 
@@ -77,11 +81,11 @@ class BBCON:
             sensob.reset()
 
     def add_motob(self):
-        print("INsdie add motod")
+        print("Inside add motod")
         motor = Motors()
         motor.forward(0.25, 1.0)
         print("drive forward")
-        motob = Motob(motor,self)
+        motob = Motob(motor, self)
         self.motobs.append(motob)
 
     def main(self):

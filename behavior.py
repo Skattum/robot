@@ -121,7 +121,7 @@ class Stop(Behavior):
     def __init__(self, bbcon, cam_sensor):
         """Init"""
         super().__init__(bbcon, [cam_sensor])
-        self.priority = bbcon.behavior_values["cam_pri"]
+        self.priority = bbcon.behavior_prios["cam_pri"]
         self.stopped = False
 
     def consider_activation(self):

@@ -1,6 +1,5 @@
-from motors import Motors
+from PLAB.motors import Motors
 from arbitrator import Arbitrator
-
 """Motob klassen"""
 
 class Motob:
