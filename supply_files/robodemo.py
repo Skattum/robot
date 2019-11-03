@@ -2,12 +2,12 @@ __author__ = 'keithd'
 
 from time import sleep
 import random
-import PLAB.imager2 as IMR
-from PLAB.reflectance_sensors import ReflectanceSensors
-from PLAB.camera import Camera
-from PLAB.motors import Motors
-from PLAB.ultrasonic import Ultrasonic
-from PLAB.zumo_button import ZumoButton
+import supply_files.imager2 as IMR
+from supply_files.reflectance_sensors import ReflectanceSensors
+from supply_files.camera import Camera
+from supply_files.motors import Motors
+from supply_files.ultrasonic import Ultrasonic
+from supply_files.zumo_button import ZumoButton
 
 
 ## BE SURE TO RUN THESE DEMOS ON THE FLOOR or to have plenty of people guarding

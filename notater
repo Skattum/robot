@@ -1,0 +1,22 @@
+
+
+
+        // FLYT
+
+        1. bbcon.run_one_timestep()
+
+                1.  bbcon.update_sensobs()
+                        1. sensob_update()
+
+                2.  bbcon.update_behaviors
+                        1. behavior.update()
+                            1. behavior.sense_and_act()
+
+                3.  bbcon.arbitrator.choose_action()
+
+                4.  bbcon.update_motobs()
+
+[4911, 2568, 2122, 2196, 3343, 5204]
+[819, 556, 509, 499, 719, 1032]
+
+

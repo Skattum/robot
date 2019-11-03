@@ -27,7 +27,6 @@ class Behavior:
 
     def consider_deactivation(self):
         # TODO 1: Skrive metode som tester hvorvidt handlingen skal deaktiveres, dersom den er activ
-
         pass
 
     def consider_activation(self):
