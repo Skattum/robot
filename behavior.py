@@ -119,7 +119,7 @@ class Picture(Behavior):
             recommendation = "forward"
             match_degree = 1
         else:
-            recommendation = "adjust left"
+            recommendation = "turn around"
             match_degree = 1
 
         return recommendation, match_degree

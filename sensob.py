@@ -60,7 +60,7 @@ class CameraSensob(Sensob):
 
     def compute (self, values):
 
-        self.value = self.rgb(values)
+        self.value = self.rgb(values[0])
 
 
 
