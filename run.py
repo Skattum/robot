@@ -4,8 +4,10 @@ from sensob import *
 from behavior import *
 from motob import Motob
 from supply_files.reflectance_sensors import ReflectanceSensors
+from supply_files.ultrasonic import Ultrasonic
 from supply_files.zumo_button import ZumoButton
 from supply_files.motors import Motors
+from supply_files.camera import Camera
 import wiringpi as wp
 import time
 
@@ -14,7 +16,10 @@ if __name__ == "__main__":
     Bruker denne filen til å sette opp roboten og starte den.
     Her er også flere av instillingene samlet.
     """
-    reflective_sensor = ReflectanceSensors(False, 130, 3600)
+    reflective_sensor = ReflectanceSensors(False, 350, 4500)
+    distance_sensor = Ultrasonic()
+    camera_sensor = Camera()
+    camera_sensor.sensor_get_value()
 
     sensobs = {
         "s_line": StopLineSensob(reflective_sensor),
@@ -31,7 +36,8 @@ if __name__ == "__main__":
         "forward": [0.4, 0.4],
         "adjust right": [.7, -.4],
         "adjust left": [-.4, .7],
-        "stop": [0, 0]
+        "stop": [0, 0],
+        "pause": [0, 0, 4]
     }
 
     config_values = {
@@ -45,7 +51,7 @@ if __name__ == "__main__":
         "stop_line_tresh": .7
     }
 
-    autorun = True  # True: kjører roboten uten å vente på knappetrykk
+    autorun = False  # True: kjører roboten uten å vente på knappetrykk
 
     if autorun:
         wp.wiringPiSetupGpio()
