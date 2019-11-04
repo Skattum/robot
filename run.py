@@ -33,7 +33,7 @@ if __name__ == "__main__":
         # key:    Navnet på kommandoen/recommendation
         # value:  Verdien som blir sent til motoren som argument i motors.set_value()
         
-        "forward": [0.4, 0.4],
+        "forward": [0.2, 0.2],
         "adjust right": [.7, -.4],
         "adjust left": [-.4, .7],
         "stop": [0, 0],

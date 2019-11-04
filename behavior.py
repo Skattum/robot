@@ -46,11 +46,14 @@ class CarryOn(Behavior):
 
     def update(self):
         """Update"""
-        for sensob in self.sensobs:
-            sensob.update()
-        recommendation, match_degree = self.sense_and_act()
-        self.weight = match_degree * self.priority
-        self.motor_recommendations = recommendation
+        if self.active_flag:
+            for sensob in self.sensobs:
+                sensob.update()
+            recommendation, match_degree = self.sense_and_act()
+            self.weight = match_degree * self.priority
+            self.motor_recommendations = recommendation
+        else:
+            self.weight = 0
 
     def sense_and_act(self):
         """
@@ -74,23 +77,23 @@ class Obstacle(Behavior):
 
     def update(self):
         """Update"""
-
-        self.sensobs[0].update()
-        recommendation, match_degree = self.sense_and_act()
-        self.weight = match_degree * self.priority
-        self.motor_recommendations = recommendation
+        if self.active_flag:
+            self.sensobs[0].update()
+            recommendation, match_degree = self.sense_and_act()
+            self.weight = match_degree * self.priority
+            self.motor_recommendations = recommendation
+        else:
+            self.weight = 0
 
     def sense_and_act(self):
 
         distance = self.sensobs[0].value
 
+        recommendation, match_degree = "forward", 0.1
 
-        recommendation, match_degree = ("forward", 0.1)
-
-        if distance < 0.07:
+        if distance < 20:
             recommendation = "stop"
-            match_degree = 1
-
+            match_degree = (20 - distance) / 10
 
         return recommendation, match_degree
 
@@ -101,11 +104,13 @@ class Picture(Behavior):
 
     def update(self):
         """Update"""
-
-        self.sensobs[0].update()
-        recommendation, match_degree = self.sense_and_act()
-        self.weight = match_degree * self.priority
-        self.motor_recommendations = recommendation
+        if self.active_flag:
+            self.sensobs[0].update()
+            recommendation, match_degree = self.sense_and_act()
+            self.weight = match_degree * self.priority
+            self.motor_recommendations = recommendation
+        else:
+            self.weight = 0
 
 
     def sense_and_act(self):
