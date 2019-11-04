@@ -67,6 +67,80 @@ class CarryOn(Behavior):
         return recommendation, 1
 
 
+class Obstacle(Behavior):
+
+    def __init__(self, bbcon, sensobs, active_flag, priority):
+        super().__init__(bbcon, sensobs, active_flag, priority)
+
+    def update(self):
+        """Update"""
+
+        self.sensobs[0].update()
+        recommendation, match_degree = self.sense_and_act()
+        self.weight = match_degree * self.priority
+        self.motor_recommendations = recommendation
+
+    def sense_and_act(self):
+
+        distance = self.sensobs[0].value
+
+
+        recommendation, match_degree = ("forward", 0.1)
+
+        if distance < 0.07:
+            recommendation = "stop"
+            match_degree = 1
+
+
+        return recommendation, match_degree
+
+class Picture(Behavior):
+
+    def __init__(self, bbcon, sensobs, active_flag, priority):
+        super().__init__(bbcon, sensobs, active_flag, priority)
+
+    def update(self):
+        """Update"""
+
+        self.sensobs[0].update()
+        recommendation, match_degree = self.sense_and_act()
+        self.weight = match_degree * self.priority
+        self.motor_recommendations = recommendation
+
+    def rgb(self, img):
+        rgb_list = [0,0,0]
+
+        for x in range(40,80):
+            for y in range(40,50):
+                band = img.getpixel((x, y))
+                rgb_list[0] += band[0]
+                rgb_list[1] += band[1]
+                rgb_list[2] += band[2]
+
+        tot = sum(rgb_list)
+        rgb_list[0] = rgb_list[0] / tot
+        rgb_list[1] = rgb_list[1] / tot
+        rgb_list[2] = rgb_list[2] / tot
+
+        return rgb_list
+
+    def sense_and_act(self):
+
+        pic_val = self.rgb(self.sensobs[0].value)
+
+        recommendation, match_degree = ("forward", 0.1)
+
+        if pic_val[2] > 0.7:
+            recommendation = "forward"
+            match_degree = 1
+        else:
+            recommendation = "adjust left"
+            match_degree = 1
+
+        return recommendation, match_degree
+
+
+
 
 
 
