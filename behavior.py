@@ -107,28 +107,13 @@ class Picture(Behavior):
         self.weight = match_degree * self.priority
         self.motor_recommendations = recommendation
 
-    def rgb(self, img):
-        rgb_list = [0,0,0]
-
-        for x in range(40,80):
-            for y in range(40,50):
-                band = img.getpixel((x, y))
-                rgb_list[0] += band[0]
-                rgb_list[1] += band[1]
-                rgb_list[2] += band[2]
-
-        tot = sum(rgb_list)
-        rgb_list[0] = rgb_list[0] / tot
-        rgb_list[1] = rgb_list[1] / tot
-        rgb_list[2] = rgb_list[2] / tot
-
-        return rgb_list
 
     def sense_and_act(self):
 
-        pic_val = self.rgb(self.sensobs[0].value)
+        pic_val = self.sensobs[0].value
 
-        recommendation, match_degree = ("forward", 0.1)
+        recommendation= "forward"
+        match_degree = 0.1
 
         if pic_val[2] > 0.7:
             recommendation = "forward"

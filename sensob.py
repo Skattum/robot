@@ -35,6 +35,35 @@ class DistanceSensob(Sensob):
     def compute(self, values):
         self.value = values[0]
 
+class CameraSensob(Sensob):
+    def __init__(self, sensors):
+        """Init"""
+        super().__init__(sensors)
+
+    def rgb(self, img):
+        rgb_list = [0,0,0]
+
+        for x in range(40,80):
+            for y in range(40,50):
+                band = img.getpixel((x, y))
+                rgb_list[0] += band[0]
+                rgb_list[1] += band[1]
+                rgb_list[2] += band[2]
+
+        tot = sum(rgb_list)
+        rgb_list[0] = rgb_list[0] / tot
+        rgb_list[1] = rgb_list[1] / tot
+        rgb_list[2] = rgb_list[2] / tot
+
+        return rgb_list
+
+
+    def compute (self, values):
+
+        self.value = self.rgb(values)
+
+
+
 
 class StopLineSensob(Sensob):
     """
@@ -51,9 +80,10 @@ class StopLineSensob(Sensob):
         val_sum = 0
         for val in values[0]:
             val_sum += val
+        snitt = val_sum / 6
 
         treshold = self.bbcon.config_values["stop_line_tresh"]
-        self.value = True if (val_sum / 6) < treshold else self.value
+        self.value = True if snitt < treshold else self.value
 
         for sensor in self.sensors:
             sensor.reset()
