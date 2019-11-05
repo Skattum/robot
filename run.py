@@ -62,13 +62,18 @@ if __name__ == "__main__":
     motob = Motob(motors, commands)
 
     prios = {
-        "carry_on": 1
+        "carry_on": .1,
+        "avoid_lines": 1,
+        "obstacle": 3,
+        "picture": 1
     }
 
     bbcon = BBCON(config_values, motob)
 
     behaviors = {
-        "carry_on": CarryOn(bbcon, (sensobs[key] for key in ["l_line", "s_line", "r_line"]), True, prios["carry_on"])
+        "carry_on": CarryOn(bbcon, True, prios["carry_on"]),
+        "avoid_lines": AvoidLines(bbcon, True, prios["avoid_lines"],
+                                  sensobs = (sensobs[key] for key in ["l_line", "s_line", "r_line"]))
     }
 
     bbcon.add_behavior(behaviors["carry_on"])
