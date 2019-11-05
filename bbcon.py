@@ -1,3 +1,4 @@
+# pylint: disable=C0301, C0201, R0902
 """Hovedklasse for kontroller"""
 from arbitrator import Arbitrator
 from motob import Motob
@@ -39,7 +40,7 @@ class BBCON:
         self.active_behaviors.remove(behavior)
 
     def run_one_timestep(self):
-
+        """Loopen"""
         # 2. Ber alle behavior oppdatere seg selv, og legger til i riktige lister
         #    dersom de nå har endret status fra aktiv til ikke aktiv, eller motsatt.
         for behavior in self.behaviors:

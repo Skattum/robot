@@ -1,3 +1,4 @@
+# pylint: disable=C0301, C0201, R0902
 """Motob-klassen"""
 from supply_files.motors import Motors
 import time

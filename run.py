@@ -1,3 +1,4 @@
+# pylint: skip-file
 """Starter Python-programmet på Raspberry Pi'en"""
 from bbcon import BBCON
 from sensob import *

@@ -1,3 +1,4 @@
+# pylint: disable=C0301, C0201, R0902
 """Sensob-klassen"""
 
 

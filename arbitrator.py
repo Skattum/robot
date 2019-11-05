@@ -1,3 +1,4 @@
+# pylint: disable=C0301,C0201
 """Arbitrator-klassen"""
 import random
 
@@ -22,9 +23,9 @@ class Arbitrator:
         # Lager en liste med intervaller av lengde lik vekten av hver anbefaling, samt ID'en til anbefalingen.
         intervals = [[0, 0, 0]]
         for key in recommendations.keys():
-            a = intervals[-1][1]
-            b = a + recommendations[key][0]
-            intervals.append([a, b, key])
+            start = intervals[-1][1]
+            stop = start + recommendations[key][0]
+            intervals.append([start, stop, key])
         limit = intervals[-1][1]
 
         # Velger et tilfeldig tall mellom 0 og den øvre grensen i det siste intervallet.
