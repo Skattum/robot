@@ -4,7 +4,7 @@
 class Behavior:
     """Behavior klassen"""
 
-    def __init__(self, bbcon, active_flag, priority, sensobs=None, halt_request=False):
+    def __init__(self, bbcon, active_flag, priority, sensobs, halt_request=False):
         """
         :param sensobs: Én eller flere sensobs.
         """
@@ -34,7 +34,8 @@ class Behavior:
             self.consider_activation()
 
         if self.active_flag:
-            self.sensobs[0].update()
+            for sensob in self.sensobs:
+                sensob.update()
             recommendation, match_degree = self.sense_and_act()
             self.weight = match_degree * self.priority
             self.motor_recommendations = recommendation
@@ -51,15 +52,31 @@ class CarryOn(Behavior):
     Går videre
     """
 
-    def __init__(self, bbcon, sensobs, active_flag, priority):
-        super().__init__(bbcon, sensobs, active_flag, priority)
+    def __init__(self, bbcon, active_flag, priority, sensobs):
+        super().__init__(bbcon, active_flag, priority, sensobs)
+
+    def consider_deactivation(self):
+        if self.bbcon.motob.recommendation is "investigate":
+            print("Deactivating " + self.__class__.__name__)
+            self.active_flag = False
+
+    def consider_activation(self):
+        if self.bbcon.motob.recommendation is "bull rage" or "turn around":
+            print("Activating " + self.__class__.__name__)
+            self.active_flag = True
 
     def sense_and_act(self):
         """
         Sense and act
         :return (recommendation, match_degree)
         """
-        return "forward", 1
+        distance = self.sensobs[0].value
+
+        recommendation, match_degree = "forward", .5
+        if distance < self.bbcon.config_values["distance_tresh"]:
+            recommendation, match_degree = "investigate", 3
+
+        return recommendation, match_degree
 
 
 class AvoidLines(Behavior):
@@ -68,8 +85,18 @@ class AvoidLines(Behavior):
     Alltid aktiv, trenger ikke
     """
 
-    def __init__(self, bbcon, sensobs, active_flag, priority):
-        super().__init__(bbcon, sensobs, active_flag, priority)
+    def __init__(self, bbcon, active_flag, priority, sensobs):
+        super().__init__(bbcon, active_flag, priority, sensobs)
+
+    def consider_deactivation(self):
+        if self.bbcon.motob.recommendation is "investigate":
+            print("Deactivating " + self.__class__.__name__)
+            self.active_flag = False
+
+    def consider_activation(self):
+        if self.bbcon.motob.recommendation is "bull rage" or "turn around":
+            print("Activating " + self.__class__.__name__)
+            self.active_flag = True
 
     def sense_and_act(self):
         """
@@ -79,7 +106,6 @@ class AvoidLines(Behavior):
         line_detection = []
         for sensob in self.sensobs:
             line_detection.append(sensob.value)
-
         match_degree = 0
 
         recommendation = "adjust right" if line_detection[0] else "forward"
@@ -88,43 +114,57 @@ class AvoidLines(Behavior):
 
         match_degree = 1 if line_detection[0] or line_detection[1] or line_detection[2] else match_degree
 
-        return recommendation, match_degree
-
-
-class Obstacle(Behavior):
-
-    def __init__(self, bbcon, sensobs, active_flag, priority):
-        super().__init__(bbcon, sensobs, active_flag, priority)
-
-    def sense_and_act(self):
-        distance = self.sensobs.value
-
-        recommendation, match_degree = "forward", 0.1
-
-        if distance < 20:
-            recommendation = "stop"
-            match_degree = (20 - distance) / 10
+        if self.bbcon.rages is 3:
+            self.halt_request = True
+            match_degree = 100
 
         return recommendation, match_degree
+
+
+# class Obstacle(Behavior):
+#
+#     def __init__(self, bbcon, active_flag, priority, sensobs):
+#         super().__init__(bbcon, active_flag, priority, sensobs)
+#
+#     def sense_and_act(self):
+#         distance = self.sensobs.value
+#
+#         recommendation, match_degree = "forward", 0.1
+#
+#         if distance < 20:
+#             recommendation = "stop"
+#             match_degree = (20 - distance) / 10
+#
+#         return recommendation, match_degree
 
 
 class Picture(Behavior):
 
-    def __init__(self, bbcon, sensobs, active_flag, priority):
-        super().__init__(bbcon, sensobs, active_flag, priority)
+    def __init__(self, bbcon, active_flag, priority, sensobs):
+        super().__init__(bbcon, active_flag, priority, sensobs)
+
+    def consider_deactivation(self):
+        if self.bbcon.motob.recommendation is "bull rage" or "turn around":
+            print("Deactivating " + self.__class__.__name__)
+            self.active_flag = False
+
+    def consider_activation(self):
+        if self.bbcon.motob.recommendation is "investigate":
+            print("Activating " + self.__class__.__name__)
+            self.active_flag = True
 
     def sense_and_act(self):
-        pic_val = self.sensobs.value
+        pic_val = self.sensobs[0].value
 
-        recommendation= "forward"
-        match_degree = 0.1
-
-        if pic_val[2] > 0.7:
-            recommendation = "forward"
+        if pic_val[2] > self.bbcon.config_values["blue_tresh"]:
+            self.bbcon.rages += 1
+            recommendation = "bull rage"
             match_degree = 1
         else:
             recommendation = "turn around"
             match_degree = 1
+
+        self.sensobs[0].sensors[0].reset()
 
         return recommendation, match_degree
 

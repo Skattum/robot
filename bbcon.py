@@ -3,6 +3,7 @@ from arbitrator import Arbitrator
 from motob import Motob
 import time
 
+
 class BBCON:
     """Behavoir-Based Controller-klasse"""
 
@@ -18,6 +19,7 @@ class BBCON:
         self.sensobs = []
         self.motob = motob
         self.arbitrator = Arbitrator(self)
+        self.rages = 0
 
     def add_behavior(self, behavior):
         """ Legger til en nylig lagd handling til behaviors-listen """
@@ -38,10 +40,6 @@ class BBCON:
 
     def run_one_timestep(self):
 
-        # 1. Ber alle sensob oppdatere seg
-        for sensob in self.sensobs:
-            sensob.update()
-
         # 2. Ber alle behavior oppdatere seg selv, og legger til i riktige lister
         #    dersom de nå har endret status fra aktiv til ikke aktiv, eller motsatt.
         for behavior in self.behaviors:
@@ -56,18 +54,9 @@ class BBCON:
 
         # 4. Oppdatere alle motobs
         if result[1]:  # Dersom vinnende handling har halt_request = True, så skal BBCON avslutte og returnere True
+            self.motob.update("stop")
             return True  # slik at roboten kjører så lenge
         print("Anbefaler: " + result[0])
-        self.motob.update(result[0])  # Oppdaterer alle motob-ene med andbefalingene
+        self.motob.update(result[0])  # Oppdaterer alle motob-ene med anbefalingene
 
         time.sleep(0.1)
-
-        # TODO: 3. Invoke the arbitrator by calling arbitrator.choose action, which will choose a winning behavior and
-        #  return that behavior’s motor recommendations and halt request flag.
-        # TODO: 4. Update the motobs based on these motor recommendations. The motobs will then update the settings of
-        #  all motors.
-        # TODO: 5. Wait - This pause (in code execution) will allow the motor settings to remain active for a short
-        #  period of time, e.g., one half second, thus producing activity in the robot, such as moving forward or
-        #  turning.
-        # TODO: 6. Reset the sensobs - Each sensob may need to reset itself, or its associated sensor(s), in some way.
-

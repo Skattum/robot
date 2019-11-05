@@ -35,6 +35,7 @@ class DistanceSensob(Sensob):
     def compute(self, values):
         self.value = values[0]
 
+
 class CameraSensob(Sensob):
     def __init__(self, sensors):
         """Init"""
@@ -57,12 +58,8 @@ class CameraSensob(Sensob):
 
         return rgb_list
 
-
     def compute (self, values):
-
         self.value = self.rgb(values[0])
-
-
 
 
 class StopLineSensob(Sensob):
